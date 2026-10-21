@@ -1,5 +1,7 @@
 # OOD Study Room
 
+[เปิดเว็บไซต์สรุปเตรียมสอบ](https://toxxy180.github.io/OOD_Final/) · [เริ่มโหมดทวนเร็ว](https://toxxy180.github.io/OOD_Final/#quick) · [ฝึกทำข้อสอบ](https://toxxy180.github.io/OOD_Final/#quiz)
+
 เว็บสรุปภาษาไทยสำหรับทบทวน Java OOP และโครงสร้างข้อมูลก่อนสอบ อ้างอิงสไลด์ 8 ไฟล์ แบบฝึกหัด 8 ไฟล์ หนังสือประกอบ และแนวโจทย์ที่ได้รับ
 
 - 9 บทหลัก: Java/OOP, Collection & Array, Complexity, Linked Collection, List, Stack, Queue, Priority Queue & Heap, Binary Tree & Huffman

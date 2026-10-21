@@ -1,0 +1,8 @@
+*.pdf
+*.txt
+node_modules/
+.cache/
+tmp/
+*.class
+.env*
+ไฟล์งานแบบฝึกหัดที่เคยทำในแต่ละบท/

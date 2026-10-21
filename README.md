@@ -1,6 +1,6 @@
 # OOD Study Room
 
-[เปิดเว็บไซต์สรุปเตรียมสอบ](https://toxxy180.github.io/OOD_Final/) · [เริ่มโหมดทวนเร็ว](https://toxxy180.github.io/OOD_Final/#quick) · [ฝึกทำข้อสอบ](https://toxxy180.github.io/OOD_Final/#quiz)
+[เปิดเว็บไซต์สรุปเตรียมสอบ](https://toxxy180.github.io/OOD_Final/) 
 
 เว็บสรุปภาษาไทยสำหรับทบทวน Java OOP และโครงสร้างข้อมูลก่อนสอบ อ้างอิงสไลด์ 8 ไฟล์ แบบฝึกหัด 8 ไฟล์ หนังสือประกอบ และแนวโจทย์ที่ได้รับ
 
@@ -25,13 +25,6 @@
 - `examples/StudyExamples.java`: ตัวอย่าง Java 17 แบบรันได้ รวมการตรวจผลตัวอย่างสำคัญ
 - `tests/models.test.cjs`: ตรวจ algorithm และชุดข้อมูลจริง โดยใช้ Node.js built-ins เท่านั้น
 
-## ตรวจการทำงาน
-
-```sh
-node tests/models.test.cjs
-javac -encoding UTF-8 -d <temporary-directory> examples/StudyExamples.java
-java -cp <temporary-directory> StudyExamples
-```
 
 โค้ดสั้นในบทเรียนบางส่วนเป็น method fragment เพื่อทบทวนการเติมคำ ต้องประกอบกับ field, constructor และ interface ที่ตรงกันก่อนคอมไพล์ ไฟล์ Java แยกใช้ชื่อคลาส/API ภายในที่สอดคล้องกันเพื่อรันตรวจหลักการได้ทันที
 

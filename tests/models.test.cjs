@@ -4,7 +4,7 @@ const path=require('node:path');
 const vm=require('node:vm');
 const root=path.resolve(__dirname,'..');
 const context=vm.createContext({window:{}});
-for(const file of ['content.js','content-advanced.js','exercises.js','algorithms.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context,{filename:file});
+for(const file of ['content.js','content-advanced.js','exercises.js','algorithms.js','teacher.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context,{filename:file});
 const S=context.window.Study,A=S.algorithms;
 const plain=x=>JSON.parse(JSON.stringify(x));
 const expected=[
@@ -35,12 +35,18 @@ for(const capacity of [0,1,4,7]){
  assert.throws(()=>q.dequeue(),/ว่าง/);
 }
 assert.equal(S.chapters.length,9);
-assert.equal(S.questions.length,49);
-assert.equal(new Set(S.questions.map(q=>q.id)).size,49);
+assert.equal(S.questions.length,97);
+assert.equal(new Set(S.questions.map(q=>q.id)).size,97);
 for(const q of S.questions){
  assert(S.chapters.some(c=>c.id===q.chapter));assert(q.explanation&&q.source);
  if(q.type==='choice')assert(q.correct>=0&&q.correct<q.choices.length);
  else assert(q.accepted.length>0);
 }
-console.log('PASS: 3 worksheet heaps; 3 traversals; heap duplicates/negative/empty cases; 2,000 queue operations; 49 question records.');
+console.log('PASS: 3 worksheet heaps; 3 traversals; heap duplicates/negative/empty cases; 2,000 queue operations; 97 question records.');
 console.log('Sections:',S.chapters.reduce((n,c)=>n+c.sections.length,0),'main,',S.supplement.length,'supplement,',S.practice.length,'practice');
+
+assert.equal(S.teacherLessons.length,7);
+const teacher=S.questions.filter(q=>q.bank==='teacher');
+assert.equal(teacher.length,48);
+for(const q of teacher){assert(q.lesson>=1&&q.lesson<=7);assert(q.source.includes(S.teacherFiles[q.lesson-1]));}
+assert.deepEqual(teacher.find(q=>q.id==='teacher-46').accepted[0].split(' ').map(Number),expected[0]);

@@ -2,9 +2,9 @@
 @media screen {
   :root {
     color-scheme: dark;
-    --bg:#111817; --paper:#192321; --ink:#e0e9e1; --text:#c6d1ca;
-    --muted:#a1b1a7; --line:#34453d; --green:#acc99c; --lime:#9fb98c;
-    --soft:#26372d; --layout-max:1760px;
+    --bg:#171b20; --paper:#20262c; --ink:#eeeae3; --text:#d1d5d8;
+    --muted:#a4adb5; --line:#363e46; --green:#b2c8ad; --lime:#b2c8ad;
+    --soft:#2c3833; --layout-max:1640px; --sidebar:235px;
   }
   html { background:var(--bg); }
   body { background:var(--bg); }
@@ -67,5 +67,102 @@
     outline-color:#b2ce9a;
   }
   ::selection { background:#597445; color:#f0f4eb; }
+}
+
+/* Revision workspace: quiet surfaces, clear reading hierarchy, centered shell. */
+.study-intro { padding:4px 0 0; }
+.study-intro h1 { font-size:clamp(30px,3.2vw,48px); line-height:1.35; letter-spacing:-.03em; margin-bottom:12px; }
+.study-intro p { color:var(--muted); font-size:18px; line-height:1.7; margin-bottom:12px; }
+.mobile-break { display:none; }
+.study-modes { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); margin:12px 0 24px; }
+.study-modes>a { display:flex; justify-content:center; align-items:center; gap:16px; padding:14px 16px; font-size:21px; font-weight:600; text-decoration:none; color:var(--ink); border-right:1px solid var(--line); }
+.study-modes>a:last-child { border-right:0; }
+.study-modes span,.study-modes b { color:var(--green); font-family:Consolas,monospace; font-weight:400; }
+.study-modes>a:hover { background:var(--soft); border-radius:6px; }
+.heap-feature { border:1px solid var(--line); border-radius:12px; padding:28px 32px 30px; background:var(--paper); }
+.heap-feature h2 { font-size:28px; margin:0 0 6px; }
+.heap-feature p { color:var(--muted); margin-bottom:20px; }
+.heap-sequence { padding:16px 22px; width:fit-content; max-width:100%; border:1px solid var(--line); border-radius:8px; background:var(--soft); font:clamp(14px,1.65vw,23px)/1.8 Consolas,monospace; letter-spacing:.02em; margin:20px auto; overflow-wrap:anywhere; }
+.heap-feature>.btn { display:flex; width:fit-content; margin:24px auto 0; padding-inline:28px; font-size:16px; }
+.teacher-overview { margin-top:36px; }
+.teacher-overview>.muted { font-size:15px; margin-bottom:18px; }
+.teacher-overview h2 { font-size:27px; }
+.teacher-list { display:grid; gap:8px; }
+.teacher-row { display:grid; grid-template-columns:38px minmax(0,1fr) auto 63px; align-items:center; gap:18px; padding:14px 18px; color:var(--ink); text-decoration:none; background:var(--paper); border:1px solid var(--line); border-radius:8px; line-height:1.6; }
+.teacher-row:hover { background:var(--soft); }
+.lesson-number { display:grid; place-items:center; width:35px; height:35px; background:var(--soft); color:var(--green); border-radius:6px; font:18px Consolas,monospace; }
+.teacher-row strong { font-size:16px; font-weight:600; }
+.teacher-row small { display:block; color:var(--muted); font-size:12px; margin-top:3px; }
+.lesson-source { font-size:12px; color:var(--muted); }
+.read-link { font-size:13px; color:var(--green); text-align:right; }
+@media screen {
+  main { padding-top:30px; }
+  .sidebar { background:var(--bg); border-left:0; padding-top:36px; }
+  .brand { margin-bottom:25px; }
+  .brand strong { color:var(--ink); font-size:28px; letter-spacing:-.03em; line-height:1.15; }
+  .brand small { display:block; margin-top:12px; font-size:11px; }
+  .nav-link { font-size:14px; min-height:46px; margin-block:4px; }
+  .nav-num { font-size:16px; }
+  .nav-utilities .nav-link { font-size:12px; min-height:36px; }
+  .nav-utilities { margin-top:22px; }
+  h1,h2,h3 { letter-spacing:-.02em; }
+  .btn,.button-row a,.mobile-header button,.search-wrap input,.filter-bar select,.lab-controls select,input[type=text],input[type=number],textarea { background:#242c32; border-color:#4d5962; }
+  .btn.primary,.btn.lime,.lab-tabs .btn[aria-pressed=true] { background:var(--lime); color:#1c2721; border-color:var(--lime); }
+  .btn.primary:hover,.btn.lime:hover { background:#c1d3bb; }
+  .quiz-score,.night-panel { background:var(--paper); border-color:var(--line); }
+  .quiz-score small,.plan-step small { color:var(--muted); }
+  th { background:#293139; }
+  pre { background:#151a1e; color:#d0dfcb; border-color:var(--line); }
+  p code,li code,td code,.note code { background:#303a40; color:#d8e2d2; }
+  .answer,.node-chain,.tree-demo,.lab-status { background:#252e33; border-color:#48564e; }
+  .note { background:#29342f; border-color:#9ab394; }
+  .pill { background:#293139; }
+  .node-chain b,.array-cell b { background:#33423a; border-color:#7c9380; }
+  .array-cell.empty b { background:var(--bg); }
+  .tree-demo circle { fill:#33423a; }
+  #toast { background:#34443b; }
+  .source-line { overflow-wrap:anywhere; }
+  .question h2 { font-size:19px; }
+  .question h2 pre { font-weight:400; letter-spacing:normal; }
+  .article { font-size:16px; }
+  .article .subtitle { font-size:17px; }
+  .article>h1 { font-size:34px; }
+  .article-section>h2 { font-size:24px; }
+  .article-section p,.article-section li { max-width:85ch; }
+  .table-scroll table { font-size:14px; }
+  ::selection { background:#526858; color:#f0f4eb; }
+}
+@media(max-width:1100px) {
+  .teacher-row { grid-template-columns:35px minmax(0,1fr) 50px; gap:12px; }
+  .lesson-source { display:none; }
+  .study-modes>a { font-size:17px; gap:10px; padding-inline:8px; }
+}
+@media(max-width:760px) {
+  .study-intro { padding-top:10px; }
+  .study-intro h1 { font-size:32px; }
+  .study-intro p { font-size:15px; }
+  .mobile-break { display:block; }
+  .study-modes { margin:14px 0 24px; }
+  .study-modes>a { font-size:14px; gap:7px; padding:12px 3px; }
+  .study-modes>a>span { display:none; }
+  .heap-feature { padding:22px 18px; }
+  .heap-feature h2 { font-size:24px; }
+  .heap-feature p { font-size:14px; }
+  .heap-sequence { padding:12px; font-size:15px; }
+  .teacher-overview { margin-top:28px; }
+  .teacher-overview h2 { font-size:23px; }
+  .teacher-overview .section-heading { flex-wrap:wrap; gap:5px; }
+  .teacher-row { padding:13px 12px; gap:10px; grid-template-columns:30px minmax(0,1fr) 40px; }
+  .lesson-number { width:28px; height:32px; font-size:16px; }
+  .teacher-row strong { font-size:14px; }
+  .teacher-row small { font-size:11px; }
+  .article>h1 { font-size:28px; }
+  .article-section>h2 { font-size:21px; }
+  .filter-bar label,.filter-bar select { width:100%; }
+  .sidebar { padding-top:26px; }
+}
+@media print {
+  .study-modes,.read-link { display:none; }
+  .heap-feature,.teacher-row { break-inside:avoid; }
 }
 

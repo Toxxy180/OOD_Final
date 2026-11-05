@@ -123,6 +123,9 @@
   #toast { background:#34443b; }
   .source-line { overflow-wrap:anywhere; }
   .question h2 { font-size:19px; }
+  .question-meta { flex-wrap:wrap; gap:6px 16px; }
+  .filter-bar label { min-width:0; max-width:100%; flex:1 1 160px; }
+  .filter-bar select { min-width:0; max-width:100%; width:100%; }
   .question h2 pre { font-weight:400; letter-spacing:normal; }
   .article { font-size:16px; }
   .article .subtitle { font-size:17px; }

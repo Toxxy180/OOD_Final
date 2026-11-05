@@ -1,0 +1,28 @@
+.fixdown-layout { display:grid; grid-template-columns:minmax(0, 1fr) 300px; gap:24px; align-items:start; }
+.fixdown-stage { margin:0; }
+.fixdown-stage h2 { font-size:23px; }
+.fixdown-stage .lab-controls { margin-top:0; }
+.fixdown-stage .wide-label { display:block; width:100%; min-width:0; }
+.fixdown-stage select { display:block; width:100%; max-width:100%; margin-top:7px; }
+.fixdown-stage .heap-sequence { white-space:normal; overflow-wrap:anywhere; }
+#fixdown-answer label { display:block; margin-bottom:8px; font-size:14px; }
+#fixdown-input { width:100%; }
+.fixdown-feedback { min-height:28px; margin-top:12px; font-size:14px; overflow-wrap:anywhere; }
+.fixdown-steps { align-items:center; margin:16px 0; }
+.fixdown-guide { padding:22px; font-size:14px; }
+.fixdown-guide h2 { font-size:21px; margin-top:0; }
+.fixdown-guide ol { padding-left:22px; }
+.fixdown-guide li { margin-bottom:10px; }
+.fixdown-guide .table-scroll { margin-left:0; margin-right:0; }
+.fixdown-guide th,.fixdown-guide td { padding:9px; min-width:0; }
+.fixdown-variants { margin-top:24px; }
+.fixdown-sorted b { border-style:dashed; opacity:.65; }
+.fixdown-scroll-hint { margin-top:8px; }
+@media(max-width:1150px) { .fixdown-layout { grid-template-columns:minmax(0,1fr); } }
+@media(max-width:760px) {
+ .fixdown-stage .tree-demo svg { min-width:470px; }
+ .fixdown-stage .button-row .btn { padding:9px 11px; }
+ .fixdown-stage .source-line { overflow-wrap:anywhere; }
+ .fixdown-guide { padding:20px 18px; }
+}
+@media print { .fixdown-layout { display:block; } #fixdown-answer,.fixdown-feedback,.fixdown-steps { display:none; } }

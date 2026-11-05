@@ -1,15 +1,26 @@
 /* Shared deterministic models power both the worked answers and the labs. */
 (() => {
 const S=window.Study;
-function fixDown(a,k,n=a.length,trace) {
+function fixDown(a,k,n=a.length,trace,mode='max') {
+    const better=(x,y)=>mode==='min'?x<y:x>y;
+    const emit=(kind,message,c=null,active=k>=0&&k<n?[k]:[])=>{
+        if(trace)trace.push({a:[...a],kind,k,c,n,active:[...active],message});
+    };
     while (2*k+1 < n) {
         let c=2*k+1;
-        if (c+1<n && a[c+1]>a[c]) c++;
-        if (a[k]>=a[c]) break;
+        const left=c,right=c+1<n?c+1:null;
+        if (right!==null && better(a[right],a[left])) c=right;
+        emit('choose',right===null?`k=${k}: มีลูกซ้ายเพียงตัวเดียว index ${c} ค่า ${a[c]}`:`k=${k}: เทียบลูกซ้าย ${a[left]} กับขวา ${a[right]} → เลือก${c===left?'ซ้าย':'ขวา'} index ${c}${a[left]===a[right]?' (ค่าเท่ากัน เลือกซ้ายตามโค้ด)':''}`,c,[k,left,...(right===null?[]:[right])]);
+        if (!better(a[c],a[k])) {
+            emit('stop',`หยุด: พ่อ ${a[k]} ${mode==='min'?'≤':'≥'} ลูกที่เลือก ${a[c]} ไม่ต้องสลับ`,c,[k,c]);
+            return;
+        }
+        const parent=a[k],child=a[c];
         [a[k],a[c]]=[a[c],a[k]];
-        if(trace) trace.push({a:[...a],message:`สลับ index ${k} กับลูกที่มากกว่า index ${c}`});
+        emit('swap',`สลับ index ${k} (${parent}) กับลูก index ${c} (${child}) แล้ว k=${c}`,c,[k,c]);
         k=c;
     }
+    emit('stop',`หยุด: k=${k} ไม่มีลูกในช่วง heap [0, ${n})`);
 }
 function heapify(input) {
     const a=[...input],steps=[{a:[...a],message:'ข้อมูลเริ่มต้น ยังไม่ปรับ'}];

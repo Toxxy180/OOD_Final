@@ -123,6 +123,14 @@
   #toast { background:#34443b; }
   .source-line { overflow-wrap:anywhere; }
   .question h2 { font-size:19px; }
+  .worksheet-context { padding:16px; margin:0 0 22px; border:1px solid var(--line); border-radius:8px; background:var(--soft); line-height:1.9; }
+  .worksheet-figure { margin:20px 0; padding:12px; border:1px solid var(--line); border-radius:8px; background:var(--bg); }
+  .worksheet-figure svg { display:block; width:100%; max-width:600px; margin:auto; }
+  .worksheet-diagram path { fill:none; stroke:var(--green); stroke-width:2; marker-end:var(--diagram-arrow); }
+  .worksheet-diagram rect { fill:var(--paper); stroke:var(--green); stroke-width:2; }
+  .worksheet-diagram text { fill:var(--ink); font:14px Consolas,monospace; }
+  .worksheet-figure figcaption { text-align:center; color:var(--muted); font-size:12px; }
+  .worksheet-reading { padding:24px 0; border-bottom:1px solid var(--line); }
   .question-meta { flex-wrap:wrap; gap:6px 16px; }
   .filter-bar label { min-width:0; max-width:100%; flex:1 1 160px; }
   .filter-bar select { min-width:0; max-width:100%; width:100%; }

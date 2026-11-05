@@ -35,27 +35,33 @@ for(const capacity of [0,1,4,7]){
  assert.throws(()=>q.dequeue(),/ว่าง/);
 }
 assert.equal(S.chapters.length,9);
-assert.equal(S.questions.length,148);
-assert.equal(new Set(S.questions.map(q=>q.id)).size,148);
+assert.equal(S.questions.length,136);
+assert.equal(new Set(S.questions.map(q=>q.id)).size,136);
 for(const q of S.questions){
  assert(S.chapters.some(c=>c.id===q.chapter));assert(q.explanation&&q.source);
- if(q.type==='choice')assert(q.correct>=0&&q.correct<q.choices.length);
+ if(q.type==='multiple'){assert(q.correct.length>1);assert(q.correct.every(i=>i>=0&&i<q.choices.length));}
+ else if(q.type==='choice')assert(q.correct>=0&&q.correct<q.choices.length);
  else assert(q.accepted.length>0);
 }
-console.log('PASS: 3 worksheet heaps; 3 traversals; heap duplicates/negative/empty cases; 2,000 queue operations; 148 question records.');
+console.log('PASS: 3 worksheet heaps; 3 traversals; heap duplicates/negative/empty cases; 2,000 queue operations; 136 question records.');
 console.log('Sections:',S.chapters.reduce((n,c)=>n+c.sections.length,0),'main,',S.supplement.length,'supplement,',S.practice.length,'practice');
 
 assert.equal(S.teacherLessons.length,7);
 const teacher=S.questions.filter(q=>q.bank==='teacher');
-assert.equal(teacher.length,99);
+assert.equal(teacher.length,87);
 for(const q of teacher){assert(q.lesson>=1&&q.lesson<=7);assert(q.source.includes(S.teacherFiles[q.lesson-1]));}
 assert.deepEqual(teacher.find(q=>q.id==='teacher-46').accepted[0].split(' ').map(Number),expected[0]);
 
 const tf=S.questions.filter(q=>q.format==='truefalse');
-assert.equal(tf.length,51);
-assert.deepEqual(plain(S.trueFalseGroups.map(g=>g.items.length)),[15,6,6,7,4,4,9]);
+assert.equal(tf.length,39);
+assert.deepEqual(plain(S.trueFalseGroups.map(g=>g.items.length)),[3,6,6,7,4,4,9]);
 // Visible answer marks on the six direct true/false first pages.
 const marked={2:[1,0,1,0,0,1],3:[1,1,0,0,0,1],4:[0,1,1,0,0,0,0],5:[0,0,1,0],6:[1,0,1,0],7:[1,0,1,1,0,1,0,1,1]};
 for(const [lesson,expected] of Object.entries(marked)) assert.deepEqual(plain(tf.filter(q=>q.lesson===Number(lesson)).map(q=>q.correct)),expected);
-for(const q of tf){assert.deepEqual(plain(q.choices),['ถูก','ผิด']);assert(q.source.includes('หน้า PDF 1'));}
+for(const q of tf){if(q.lesson!==1)assert.deepEqual(plain(q.choices),['ถูก','ผิด']);assert(q.source.includes('หน้า PDF 1'));}
 for(const c of S.teacherLessons)assert.match(c.sections[0].title,/ถูก–ผิด/);
+
+assert.deepEqual(plain(tf.find(q=>q.id==='worksheet-1-2').correct),[1,4,5]);
+assert.deepEqual(plain(tf.find(q=>q.id==='worksheet-1-3').correct),[0,6]);
+for(const id of ['tf-4-03','tf-4-05','tf-4-06','tf-5-04'])assert(tf.find(q=>q.id===id).attachments.length>50);
+for(const q of tf.filter(q=>q.lesson===7).slice(0,7))assert(q.context.includes('13, 50, 40, 5, 12, 4'));

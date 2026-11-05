@@ -129,9 +129,25 @@ private void fixDown(int k, int n) {
 } // root=1, parent=k/2, heapify เริ่ม k=n/2`]
 ];
 
+function answerTree(values,expected,checked){
+ const levels=Math.floor(Math.log2(values.length))+1,width=Math.max(300,2**(levels-1)*84),height=levels*110+14;
+ const points=values.map((_,i)=>{
+  const level=Math.floor(Math.log2(i+1)),position=i-(2**level-1);
+  return {x:(position+.5)*width/(2**level),y:42+level*110};
+ });
+ const lines=points.slice(1).map((p,i)=>{const parent=points[Math.floor(i/2)];return `<line x1="${parent.x}" y1="${parent.y}" x2="${p.x}" y2="${p.y}"/>`;}).join('');
+ const nodes=values.map((raw,i)=>{
+  const valid=/^[-+]?\d+$/.test(raw.trim())&&Number.isSafeInteger(Number(raw)),correct=valid&&Number(raw)===expected[i];
+  const state=checked?(correct?'correct':'wrong'):'';
+  return `<label class="fixdown-node ${state}" for="fixdown-node-${i}" style="left:${points[i].x/width*100}%;top:${points[i].y-30}px"><span class="sr-only">คำตอบปม index ${i}${i===0?' ราก':''}</span><input id="fixdown-node-${i}" data-answer-node="${i}" type="text" inputmode="text" autocomplete="off" spellcheck="false" placeholder="?" value="${E(raw)}" aria-describedby="fixdown-node-label-${i}" ${checked?`aria-invalid="${!correct}"`:''}><small id="fixdown-node-label-${i}">index ${i}${checked?`<span>${correct?'✓ ถูก':'✕ แก้ไข'}</span>`:''}</small></label>`;
+ }).join('');
+ return `<div class="fixdown-answer-scroll" tabindex="0" role="group" aria-label="แผนภาพ Binary Tree สำหรับกรอกคำตอบ เลื่อนซ้ายขวาได้"><div class="fixdown-answer-tree" style="--answer-tree-width:${width}px;height:${height}px"><svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">${lines}</svg>${nodes}</div></div>`;
+}
+
 function mount(root,{treeSVG}){
- let index=0,step=0,raw='',feedback='',revealed=false,result=run(sets[index]);
- function paint(){
+ let index=0,step=0,feedback='',revealed=false,checked=false,result=run(sets[index]),nodeAnswers=result.a.map(()=>'');
+ function paint(centerTree=false){
+  const focused=root.contains(document.activeElement)?document.activeElement.id:'',previousScroll=root.querySelector('.fixdown-answer-scroll'),scrollLeft=previousScroll?.scrollLeft||0;
   const set=sets[index],current=result.steps[step],operation=set.operation||'fixDown';
   root.innerHTML=`<div class="topbar"><a href="#heap">← Binary Heap</a><span>ชุดฝึกเสริม ${sets.length} รูปแบบ</span></div>
    <div class="page-intro"><h1 class="page-title">Binary Heap · ฝึก fixDown</h1><p>อ่านต้นไม้ → เลือกลูก → เทียบกับพ่อ → สลับแล้วลงต่อ ฝึกทั้งการปรับปมเดียวและการนำไปใช้</p></div>
@@ -140,8 +156,9 @@ function mount(root,{treeSVG}){
    <h2>${E(set.name)}</h2><p class="source-line">${E(set.source||'โจทย์สร้างเพิ่มสำหรับฝึกหลักการ ไม่ใช่โจทย์ต้นฉบับจากสไลด์')} · ภาพทุกชุดใช้ index เริ่ม 0</p>
    <p><b>คำสั่ง:</b> ${operation==='fixDown'?`ทำ fixDown(${set.k}) แบบ ${set.mode||'max'}-heap`:operation==='heapify'?'สร้าง max-heap ด้วย bottom-up fixDown จากพ่อสุดท้ายย้อนถึงราก':operation==='pop'?'dequeue ค่ามากสุด 1 ครั้ง แล้ว fixDown(0)':'เรียงน้อยไปมากด้วย Heapsort และ fixDown ในช่วง heap ที่เหลือ'}</p>
    <p class="heap-sequence">เริ่ม [${set.values.join(', ')}]</p>
-   <form id="fixdown-answer"><label for="fixdown-input">ลองเติมอาร์เรย์${operation==='sort'?'ที่เรียงแล้ว':'สุดท้าย'}ก่อนเปิดเฉลย</label><input id="fixdown-input" type="text" autocomplete="off" placeholder="เช่น 50, 30, 40, …" value="${E(raw)}"><div class="button-row"><button class="btn primary" type="submit">ตรวจคำตอบ</button><button class="btn" type="button" data-fd="reset">เริ่มข้อนี้ใหม่</button></div></form>
+   <form id="fixdown-answer" novalidate><fieldset class="fixdown-answer-field"><legend>เติมคำตอบ${operation==='sort'?'ที่เรียงแล้ว':'สุดท้าย'}ลงในแต่ละปมของ Binary Tree</legend><p class="small muted" id="fixdown-answer-help">กรอกจำนวนเต็ม 1 ค่าต่อปม ตาม index ใต้ช่อง · ใช้ Tab เพื่อไปปมถัดไป · เลื่อนภาพซ้าย–ขวาได้${operation==='pop'?' · ภาพคำตอบลดจำนวนปมหลัง dequeue แล้ว':''}${operation==='sort'?' · สำหรับ Heapsort ให้ใส่ค่าที่เรียงแล้วตาม index ในภาพ ผลลัพธ์นี้ไม่ใช่ heap':''}</p>${answerTree(nodeAnswers,result.a,checked)}<p class="small muted" id="fixdown-answer-count">กรอกแล้ว ${nodeAnswers.filter(v=>v.trim()).length} / ${nodeAnswers.length} ปม</p></fieldset><div class="button-row"><button class="btn primary" type="submit">ตรวจคำตอบ</button><button class="btn" type="button" data-fd="reset">เริ่มข้อนี้ใหม่</button></div></form>
    <div class="fixdown-feedback" role="status">${E(feedback)}</div>
+   <h3 class="fixdown-solution-title">ภาพเฉลย · ไล่การปรับทีละขั้น</h3>
    <div class="button-row fixdown-steps"><button class="btn tiny" data-fd="back" ${step===0?'disabled':''}>← ขั้นก่อน</button><span class="meta">ขั้น ${step+1} / ${result.steps.length}</span><button class="btn tiny" data-fd="next" ${step===result.steps.length-1?'disabled':''}>ขั้นถัดไป →</button><button class="btn tiny" data-fd="all">ดูผลสุดท้าย</button></div>
    <div class="lab-status" role="status">${E(current.message)}</div><p class="small muted">size ของช่วง heap = ${current.n}${current.k!==undefined?` · k = ${current.k}`:''}${current.c!==null&&current.c!==undefined?` · c = ${current.c}`:''} · สีเขียวคือปมที่กำลังพิจารณา${operation==='sort'?' · ช่อง “เรียงแล้ว” อยู่นอก heap':''}</p>
    <div class="array-view" role="group" aria-label="อาร์เรย์ในขั้นปัจจุบัน">${current.a.map((v,i)=>`<div class="array-cell ${current.active.includes(i)?'active':''} ${i>=current.n?'fixdown-sorted':''}"><small>${i}</small><b>${v}</b>${i>=current.n?'<small>เรียงแล้ว</small>':''}</div>`).join('')}</div>
@@ -152,16 +169,29 @@ function mount(root,{treeSVG}){
    ${table(['งาน','จุดเริ่ม / ขอบเขต'],[['fixDown(k)','ปรับเส้นทางลงจาก k · O(log n) worst case'],['heapify','k=floor(n/2)−1 → 0 · Θ(n)'],['dequeue','ย้ายท้ายขึ้นราก ลด size แล้ว fixDown(0) · O(log n)'],['Heapsort','swap รากกับท้าย ลดขอบเขต แล้ว fixDown(0) · O(n log n)']])}<p class="small muted">ตรวจชุดข้อมูลและภาพคำตอบกับแบบฝึกหัด_ครั้งที่7_เฉลย.pdf หน้า 2 และโค้ดหน้า 5–6 แล้ว ตัวอย่างเสริมแสดงวิธีประยุกต์ ไม่ได้อ้างว่าทุกแบบปรากฏในเอกสาร</p></aside></div>
    <section class="article fixdown-variants"><h2>โค้ด fixDown หลายแบบ</h2><p>แบบแรกยึด Object / Comparable ตามเฉลยครั้งที่ 7 หน้า 5–6 แบบอื่นเป็นตัวอย่างเสริมสำหรับ int[] a ทั้งหมดเป็น method fragment ต้องประกอบกับ field และ swap ก่อนใช้ แบบวนซ้ำ, recursive และ hole ให้ผลเดียวกันเมื่อเลือกซ้ายกรณีค่าเท่ากัน</p>${variants.map(([title,source])=>`<details class="answer"><summary>${E(title)}</summary><div>${code(source)}</div></details>`).join('')}<p>แบบวนซ้ำและ hole ใช้พื้นที่เสริม O(1); recursive ใช้ call stack O(log n) ส่วนแบบ index เริ่ม 1 ต้องเปลี่ยนสูตรและขอบเขตทั้งชุด ภาพฝึกด้านบนใช้ index เริ่ม 0</p><p><a href="#chapter/heap">อ่านบท Priority Queue & Heap</a> · <a href="#teacher/7">เฉลยครั้งที่ 7</a> · <a href="#lab/heap">ตัวจำลอง enqueue / dequeue</a></p></section>`;
   root.querySelector('#fixdown-set').addEventListener('change',e=>choose(Number(e.target.value)));
-  root.querySelector('#fixdown-input').addEventListener('input',e=>{raw=e.target.value;feedback='';root.querySelector('.fixdown-feedback').textContent='';});
-  root.querySelector('#fixdown-answer').addEventListener('submit',e=>{
-   e.preventDefault();const actual=parseAnswer(raw);
-   if(!actual)feedback='กรอกจำนวนเต็ม คั่นด้วยจุลภาค ช่องว่าง หรือ →';
-   else if(actual.length!==result.a.length)feedback=`ยังไม่ครบตามโจทย์: ต้องมี ${result.a.length} ค่า แต่ตอบมา ${actual.length} ค่า`;
-   else{const wrong=actual.findIndex((v,i)=>v!==result.a[i]);if(wrong===-1){feedback='ถูกต้อง ✓ อาร์เรย์ตรงตามวิธีและกติกาของข้อนี้';revealed=true;}else feedback=`ยังไม่ตรงที่ index ${wrong} ลองไล่การเลือกลูกอีกครั้ง (ข้อนี้เลือกซ้ายเมื่อค่าเท่ากัน)`;}
-   paint();
+  root.querySelector('#fixdown-answer').addEventListener('input',e=>{
+   if(e.target.dataset.answerNode===undefined)return;
+   nodeAnswers[Number(e.target.dataset.answerNode)]=e.target.value;feedback='';checked=false;
+   root.querySelector('.fixdown-feedback').textContent='';
+   root.querySelector('#fixdown-answer-count').textContent=`กรอกแล้ว ${nodeAnswers.filter(v=>v.trim()).length} / ${nodeAnswers.length} ปม`;
+   root.querySelectorAll('.fixdown-node').forEach((el,i)=>{el.classList.remove('correct','wrong');el.querySelector('input').removeAttribute('aria-invalid');el.querySelector('small').textContent=`index ${i}`;});
   });
+  root.querySelector('#fixdown-answer').addEventListener('submit',e=>{
+   e.preventDefault();checked=true;
+   const missing=nodeAnswers.filter(v=>!v.trim()).length,invalid=nodeAnswers.filter(v=>v.trim()&&(!/^[-+]?\d+$/.test(v.trim())||!Number.isSafeInteger(Number(v)))).length;
+   const wrong=nodeAnswers.filter((v,i)=>Number(v)!==result.a[i]).length;
+   if(missing)feedback=`ยังกรอกไม่ครบ: เหลือ ${missing} ปม กรุณาเติมช่องในภาพให้ครบ`;
+   else if(invalid)feedback=`มี ${invalid} ปมที่ค่าไม่ถูกต้อง กรอกจำนวนเต็มเพียง 1 ค่าต่อปม`;
+   else if(wrong)feedback=`ยังไม่ตรง ${wrong} ปม: ดูช่องที่มีเครื่องหมาย ✕ แล้วลองไล่การเลือกลูกอีกครั้ง (ข้อนี้เลือกซ้ายเมื่อค่าเท่ากัน)`;
+   else{feedback='ถูกต้อง ✓ ค่าทุกปมตรงตามวิธีและกติกาของข้อนี้';revealed=true;}
+   paint();
+   root.querySelector('.fixdown-node.wrong input')?.focus();
+  });
+  if(focused)root.querySelector(`#${focused}`)?.focus({preventScroll:true});
+  const viewport=root.querySelector('.fixdown-answer-scroll');
+  viewport.scrollLeft=centerTree||!previousScroll?(viewport.scrollWidth-viewport.clientWidth)/2:scrollLeft;
  }
- function choose(next){index=next;step=0;raw='';feedback='';revealed=false;result=run(sets[index]);paint();}
+ function choose(next){index=next;step=0;feedback='';revealed=false;checked=false;result=run(sets[index]);nodeAnswers=result.a.map(()=>'');paint(true);}
  root.onclick=e=>{
   const button=e.target.closest('[data-fd]');if(!button||button.disabled)return;
   const action=button.dataset.fd;

@@ -5,8 +5,22 @@
 .fixdown-stage .wide-label { display:block; width:100%; min-width:0; }
 .fixdown-stage select { display:block; width:100%; max-width:100%; margin-top:7px; }
 .fixdown-stage .heap-sequence { white-space:normal; overflow-wrap:anywhere; }
-#fixdown-answer label { display:block; margin-bottom:8px; font-size:14px; }
-#fixdown-input { width:100%; }
+.fixdown-answer-field { border:0; padding:0; margin:0; min-width:0; }
+.fixdown-answer-field legend { font-size:16px; font-weight:600; padding:0; margin-bottom:8px; }
+.fixdown-answer-scroll { max-width:100%; overflow-x:auto; background:var(--bg); border:1px solid var(--line); border-radius:10px; margin:16px 0; }
+.fixdown-answer-tree { position:relative; width:100%; min-width:var(--answer-tree-width); }
+.fixdown-answer-tree svg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.fixdown-answer-tree line { stroke:#71856e; stroke-width:2; }
+.fixdown-node { position:absolute; transform:translateX(-50%); display:flex; align-items:center; flex-direction:column; width:80px; gap:4px; font-size:12px; }
+.fixdown-node input[type=text] { width:60px; height:60px; padding:4px; margin:0; border-radius:50%; border:2px solid #809675; text-align:center; font:18px Consolas,monospace; background:var(--bg); color:var(--text); }
+.fixdown-node input:focus { outline:3px solid var(--lime,#a6c371); outline-offset:3px; }
+.fixdown-node small { font:11px/1.5 Consolas,monospace; text-align:center; white-space:nowrap; color:var(--muted); }
+.fixdown-node small span { display:block; }
+.fixdown-node.correct input { border-color:#91c494; background:#263e30; color:#e0f4dc; }
+.fixdown-node.wrong input { border-color:#ebac8d; background:#48352f; color:#ffddd0; }
+.fixdown-node.correct small { color:#a8d5a9; }
+.fixdown-node.wrong small { color:#f2b89a; }
+.fixdown-solution-title { margin-top:28px; padding-top:20px; border-top:1px solid var(--line); font-size:18px; }
 .fixdown-feedback { min-height:28px; margin-top:12px; font-size:14px; overflow-wrap:anywhere; }
 .fixdown-steps { align-items:center; margin:16px 0; }
 .fixdown-guide { padding:22px; font-size:14px; }
@@ -25,4 +39,4 @@
  .fixdown-stage .source-line { overflow-wrap:anywhere; }
  .fixdown-guide { padding:20px 18px; }
 }
-@media print { .fixdown-layout { display:block; } #fixdown-answer,.fixdown-feedback,.fixdown-steps { display:none; } }
+@media print { .fixdown-layout { display:block; } .fixdown-feedback,.fixdown-steps,#fixdown-answer .button-row { display:none; } .fixdown-answer-scroll { overflow:visible; } .fixdown-answer-tree { min-width:0; } .fixdown-node input[type=text] { width:42px; height:42px; margin-top:9px; color:#111; background:white; } }

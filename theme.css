@@ -95,6 +95,21 @@
 .teacher-row small { display:block; color:var(--muted); font-size:12px; margin-top:3px; }
 .lesson-source { font-size:12px; color:var(--muted); }
 .read-link { font-size:13px; color:var(--green); text-align:right; }
+.ir-diagram { overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin:20px 0; padding:12px; background:var(--bg); }
+.ir-diagram svg { display:block; width:100%; max-width:850px; margin:auto; }
+.ir-diagram line { stroke:var(--line); stroke-width:2; }
+.ir-diagram .edge-label { fill:var(--muted); font:12px Consolas,monospace; text-anchor:middle; }
+.ir-node circle { fill:var(--paper); stroke:var(--muted); stroke-width:1.8; }
+.ir-node text { fill:var(--ink); text-anchor:middle; font:18px Consolas,monospace; }
+.ir-node.visited circle { fill:var(--soft); stroke:var(--green); }
+.ir-node.current circle { stroke:#7fb1e8; stroke-width:4; }
+.ir-node .visit-number { fill:var(--green); font-size:13px; }
+.ir-links { margin:15px 0 24px; }
+.ir-links summary { cursor:pointer; color:var(--green); }
+.ir-answer { display:block; width:100%; margin-top:8px; padding:12px; border:1px solid var(--line); border-radius:8px; }
+.ir-solution { border-top:1px solid var(--line); margin-top:25px; padding-top:25px; }
+#ir-sequence { overflow-wrap:anywhere; }
+@media print { .ir-diagram { overflow:visible; } .ir-diagram svg { min-width:0!important; } }
 @media screen {
   main { padding-top:30px; }
   .sidebar { background:var(--bg); border-left:0; padding-top:36px; }
